@@ -99,32 +99,11 @@ Keep your private configuration out of version control or use a separate local c
 UE5 DSM provides an HTTP API on port 1204.
 
 All API requests use the:
+
+Endpoints:
+
+### Get Server List
 ```
-POST
-
-
-method.
-
-Base URL
-http://your_server_ip:1204
-
-Authorization
-
-All API requests require an authorization field.
-
-Example:
-
-{
-    "authorization": "YOUR_AUTHORIZATION_KEY"
-}
-```
-
-[!IMPORTANT]
-Do not commit your real authorization key to the repository.
-
-Endpoints
-Get Server List
-
 Returns the available servers for a project.
 
 Endpoint
@@ -135,9 +114,9 @@ Request
     "authorization": "YOUR_AUTHORIZATION_KEY",
     "projectname": "DSMFPSServer"
 }
-
-Create Server
-
+```
+### Create Server
+```
 Creates a new Unreal Engine Dedicated Server instance.
 
 Endpoint
@@ -153,6 +132,7 @@ Request
     "mapname": "Map_a_WP",
     "maxplayers": 8
 }
+```
 
 Parameters
 Parameter   Type    Description
@@ -165,8 +145,8 @@ mapname string  Unreal Engine map name
 maxplayers  integer Maximum number of players
 Delete Server
 
-Deletes an existing server instance.
-
+### Deletes an existing server instance.
+```
 Endpoint
 POST /api/delete_server
 
@@ -176,6 +156,7 @@ Request
     "projectname": "DSMFPSServer",
     "name": "World_map"
 }
+```
 
 Parameters
 Parameter   Type    Description
@@ -184,9 +165,10 @@ projectname string  Unreal Engine project name
 name    string  Server instance name
 Prepare Build
 
-Prepares a newly uploaded Dedicated Server build.
+### Prepares a newly uploaded Dedicated Server build.
 
 Endpoint
+```
 POST /api/prepare_build
 
 Request
@@ -194,10 +176,10 @@ Request
     "authorization": "YOUR_AUTHORIZATION_KEY",
     "buildname": "LinuxServer"
 }
-
+```
 
 [!IMPORTANT]
-After uploading a new packaged server ZIP, /api/prepare_build must be called immediately.
+### After uploading a new packaged server ZIP, /api/prepare_build must be called immediately.
 
 Recommended Workflow
 1. Package the Unreal Engine Dedicated Server
@@ -208,14 +190,14 @@ Recommended Workflow
 
 
 Example:
-
+```
 POST /api/prepare_build
 
 {
     "authorization": "YOUR_AUTHORIZATION_KEY",
     "buildname": "LinuxServer"
 }
-
+```
 
 The buildname must match the uploaded server build.
 
