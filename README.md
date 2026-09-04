@@ -65,6 +65,7 @@ The expected build structure is:
 build-linux/
 ├── UE5ServMan
 ├── ServerBuild/
+    └── LinuxServer/
 └── build/
 ```
 Directory / File    Description
