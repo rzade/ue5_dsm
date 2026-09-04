@@ -108,7 +108,7 @@ Endpoints:
 Returns the available servers for a project.
 
 Endpoint
-POST /api/server_list
+POST your_server_ip:your_port/api/server_list
 
 Request
 {
@@ -121,7 +121,7 @@ Request
 Creates a new Unreal Engine Dedicated Server instance.
 
 Endpoint
-POST /api/create_server
+POST your_server_ip:your_port/api/create_server
 
 Request
 {
@@ -149,7 +149,7 @@ Delete Server
 ### Deletes an existing server instance.
 ```
 Endpoint
-POST /api/delete_server
+POST your_server_ip:your_port/api/delete_server
 
 Request
 {
@@ -170,7 +170,7 @@ Prepare Build
 
 Endpoint
 ```
-POST /api/prepare_build
+POST your_server_ip:your_port/api/prepare_build
 
 Request
 {
@@ -192,7 +192,7 @@ Recommended Workflow
 
 Example:
 ```
-POST /api/prepare_build
+POST your_server_ip:your_port/api/prepare_build
 
 {
     "authorization": "YOUR_AUTHORIZATION_KEY",
@@ -300,7 +300,7 @@ Recommended Deployment Flow
 
 To check the available servers at any time:
 
-POST /api/server_list
+POST your_server_ip:your_port/api/server_list
 
 ## Running UE5 DSM
 
