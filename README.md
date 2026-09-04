@@ -13,18 +13,18 @@ Requirements
 
 UE5 DSM requires an Ubuntu/Debian-based Linux system.
 
-System Dependencies
+## System Dependencies
 
 Install the required packages:
 
 sudo apt update
-
+```
 sudo apt install -y \
     build-essential \
     cmake \
     git \
     unzip
-
+```
 
 An installed Unreal Engine 5 version is also required for building and packaging the Unreal Engine Dedicated Server.
 
