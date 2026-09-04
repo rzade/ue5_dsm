@@ -73,16 +73,16 @@ build/  CMake and other build-related files
 Configuration
 
 Before building UE5 DSM, configure your server address and authorization key in:
-
+```
 src/config.h
-
+```
 
 Set the required values:
-
+```
 #define HTTP_HOST "YOUR_SERVER_IP"
 #define SERVER_IP "YOUR_SERVER_IP"
 #define AUTH_KEY "YOUR_AUTHORIZATION_KEY"
-
+```
 
 Replace:
 
@@ -94,12 +94,12 @@ Never commit your real authorization key to a public GitHub repository.
 
 Keep your private configuration out of version control or use a separate local configuration file.
 
-API
+## API
 
 UE5 DSM provides an HTTP API on port 1204.
 
 All API requests use the:
-
+```
 POST
 
 
@@ -117,7 +117,7 @@ Example:
 {
     "authorization": "YOUR_AUTHORIZATION_KEY"
 }
-
+```
 
 [!IMPORTANT]
 Do not commit your real authorization key to the repository.
