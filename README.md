@@ -1,10 +1,21 @@
 UE5 DSM
 
-UE5 DSM (Unreal Engine 5 Dedicated Server Manager) is a lightweight C++17 application for managing Unreal Engine 5 dedicated servers.
+UE5 DSM (Unreal Engine 5 Dedicated Server Manager) is a lightweight C++17 application for managing Unreal Engine 5 Dedicated Servers.
 
+It provides a simple HTTP API for:
+
+Managing Dedicated Server builds
+Creating server instances
+Deleting server instances
+Listing available servers
+Preparing newly uploaded server builds
 Requirements
 
-Ubuntu/Debian-based Linux systems:
+UE5 DSM requires an Ubuntu/Debian-based Linux system.
+
+System Dependencies
+
+Install the required packages:
 
 sudo apt update
 
@@ -15,29 +26,24 @@ sudo apt install -y \
     unzip
 
 
-An installed Unreal Engine version is also required for building and packaging the Unreal Engine Dedicated Server.
+An installed Unreal Engine 5 version is also required for building and packaging the Unreal Engine Dedicated Server.
 
 Build
-
-Clone the repository:
-
+1. Clone the Repository
 git clone https://github.com/rzade/ue5_dsm.git
 cd ue5_dsm
 
-
-Create the Linux build directory:
-
+2. Create the Linux Build Directory
 mkdir build-linux
 cd build-linux
 
+3. Configure the Project
 
-Configure the project in Release mode:
+Configure CMake in Release mode:
 
 cmake .. -DCMAKE_BUILD_TYPE=Release
 
-
-Build the project:
-
+4. Build
 cmake --build . -j1
 
 
@@ -45,9 +51,7 @@ After a successful build, the executable will be available at:
 
 build-linux/UE5ServMan
 
-
-Run the application:
-
+5. Run
 ./UE5ServMan
 
 Build Output
@@ -59,23 +63,18 @@ build-linux/
 ├── ServerBuild/
 └── build/
 
-
-UE5ServMan is the main executable.
-
-ServerBuild/ contains the packaged Unreal Engine Dedicated Server.
-
-build/ contains build-related files generated during the build process.
-
+Directory / File    Description
+UE5ServMan  Main UE5 DSM executable
+ServerBuild/    Packaged Unreal Engine Dedicated Server builds
+build/  CMake and other build-related files
 Configuration
 
-Before building UE5 DSM, configure your server address and authorization key in config.h.
-
-Open:
+Before building UE5 DSM, configure your server address and authorization key in:
 
 src/config.h
 
 
-Set your own server IP and authorization key:
+Set the required values:
 
 #define HTTP_HOST "YOUR_SERVER_IP"
 #define SERVER_IP "YOUR_SERVER_IP"
@@ -84,40 +83,51 @@ Set your own server IP and authorization key:
 
 Replace:
 
-YOUR_SERVER_IP with your UE5 DSM server IP address.
-YOUR_AUTHORIZATION_KEY with your API authorization key.
+YOUR_SERVER_IP — Your UE5 DSM server IP address.
+YOUR_AUTHORIZATION_KEY — Your API authorization key.
 
-Important: Do not commit your real authorization key to a public GitHub repository. Keep your private config.h out of version control or use a separate local configuration file.
+[!WARNING]
+Never commit your real authorization key to a public GitHub repository.
+
+Keep your private configuration out of version control or use a separate local configuration file.
 
 API
 
-The server manager provides a HTTP API on port 1204.
+UE5 DSM provides an HTTP API on port 1204.
 
-All API requests use the POST method.
+All API requests use the:
+
+POST
+
+
+method.
+
+Base URL
+http://your_server_ip:1204
 
 Authorization
 
-API requests require an authorization field.
+All API requests require an authorization field.
 
-For security reasons, do not commit your real authorization key to the repository.
-
-Use your own authorization value:
+Example:
 
 {
     "authorization": "YOUR_AUTHORIZATION_KEY"
 }
 
+
+[!IMPORTANT]
+Do not commit your real authorization key to the repository.
+
+Endpoints
 Get Server List
 
 Returns the available servers for a project.
 
-Endpoint:
+Endpoint
+POST /api/server_list
 
-POST http://your_server_ip:1204/api/server_list
-
-
-Request:
-
+Request
 {
     "authorization": "YOUR_AUTHORIZATION_KEY",
     "projectname": "DSMFPSServer"
@@ -127,13 +137,10 @@ Create Server
 
 Creates a new Unreal Engine Dedicated Server instance.
 
-Endpoint:
+Endpoint
+POST /api/create_server
 
-POST http://your_server_ip:1204/api/create_server
-
-
-Request:
-
+Request
 {
     "authorization": "YOUR_AUTHORIZATION_KEY",
     "buildname": "LinuxServer",
@@ -157,13 +164,10 @@ Delete Server
 
 Deletes an existing server instance.
 
-Endpoint:
+Endpoint
+POST /api/delete_server
 
-POST http://your_server_ip:1204/api/delete_server
-
-
-Request:
-
+Request
 {
     "authorization": "YOUR_AUTHORIZATION_KEY",
     "projectname": "DSMFPSServer",
@@ -177,31 +181,27 @@ projectname string  Unreal Engine project name
 name    string  Server instance name
 Prepare Build
 
-Prepares the newly uploaded Dedicated Server build.
+Prepares a newly uploaded Dedicated Server build.
 
-Endpoint:
+Endpoint
+POST /api/prepare_build
 
-POST http://your_server_ip:1204/api/prepare_build
-
-
-Request:
-
+Request
 {
     "authorization": "YOUR_AUTHORIZATION_KEY",
     "buildname": "LinuxServer"
 }
 
-Important
 
+[!IMPORTANT]
 After uploading a new packaged server ZIP, /api/prepare_build must be called immediately.
 
-The recommended workflow is:
-
+Recommended Workflow
 1. Package the Unreal Engine Dedicated Server
 2. Create the server ZIP
 3. Upload the new ZIP
 4. Call /api/prepare_build
-5. The new build is prepared and ready to be used
+5. The new build is ready to be used
 
 
 Example:
@@ -218,36 +218,39 @@ The buildname must match the uploaded server build.
 
 API Workflow
 
-A typical server management workflow is:
+A typical server management workflow looks like this:
 
-                    ┌─────────────────────┐
-                    │ Upload Server ZIP   │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │   prepare_build     │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │    create_server    │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │    Server Running   │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │    delete_server    │
-                    └─────────────────────┘
+┌─────────────────────┐
+│  Upload Server ZIP  │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│   prepare_build     │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│    create_server    │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│    Server Running   │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│    delete_server    │
+└─────────────────────┘
 
 Unreal Engine Project Configuration
 
-Before using UE5 DSM with your Unreal Engine project, add the following configuration to your project's Config/DefaultGame.ini file.
+Before using UE5 DSM with your Unreal Engine project, add the following configuration to:
 
+Config/DefaultGame.ini
+
+Complete Configuration
 [/Script/Engine.GameSession]
 bRequiresPushToTalk=true
 MaxPlayers=100
@@ -261,14 +264,14 @@ MinDynamicBandwidth=4000
 ServerAddress=YOUR_SERVER_IP:1204
 AuthKey=YOUR_AUTHORIZATION_KEY
 
-Configuration
 Game Session
 [/Script/Engine.GameSession]
 bRequiresPushToTalk=true
 MaxPlayers=100
 
-bRequiresPushToTalk enables the Push-to-Talk requirement.
-MaxPlayers defines the maximum number of players allowed in the game session.
+Setting Description
+bRequiresPushToTalk Enables the Push-to-Talk requirement
+MaxPlayers  Maximum number of players allowed in the game session
 Network Configuration
 [/Script/Engine.GameNetworkManager]
 TotalNetBandwidth=600000
@@ -276,88 +279,132 @@ MaxDynamicBandwidth=80000
 MinDynamicBandwidth=4000
 
 
-These values configure the Unreal Engine network bandwidth limits for the dedicated server.
+These values configure the Unreal Engine network bandwidth limits for the Dedicated Server.
 
 UE5 DSM Configuration
 [/Script/DSMProject.DSMGameInstance]
 ServerAddress=YOUR_SERVER_IP:1204
 AuthKey=YOUR_AUTHORIZATION_KEY
 
-ServerAddress is the address and port of the UE5 DSM API server.
-AuthKey is the authorization key used when communicating with the UE5 DSM API.
-
-For example:
-
+Setting Description
+ServerAddress   Address and port of the UE5 DSM API server
+AuthKey Authorization key used when communicating with the UE5 DSM API
+Example
 [/Script/DSMProject.DSMGameInstance]
 ServerAddress=164.92.158.177:1204
 AuthKey=YOUR_AUTHORIZATION_KEY
 
 
-Important: Do not commit your real AuthKey to a public GitHub repository. Use a placeholder in source-controlled configuration files and provide the real key through your deployment configuration or another secure mechanism.
+[!WARNING]
+Never commit your real AuthKey to a public GitHub repository.
 
-After changing DefaultGame.ini, rebuild/package your Unreal Engine Dedicated Server before uploading the new server ZIP to UE5 DSM.
+Use a placeholder in source-controlled configuration files and provide the real key through your deployment configuration or another secure mechanism.
+
+After changing DefaultGame.ini, you must rebuild and package your Unreal Engine Dedicated Server before uploading the new server ZIP to UE5 DSM.
 
 Recommended Deployment Flow
-Unreal Engine Project
-        │
-        ▼
-Config/DefaultGame.ini
-        │
-        ▼
-Package Dedicated Server
-        │
-        ▼
-Create Server ZIP
-        │
-        ▼
-Upload ZIP to UE5 DSM
-        │
-        ▼
-POST /api/prepare_build
-        │
-        ▼
-POST /api/create_server
-        │
-        ▼
-Dedicated Server Running
+┌──────────────────────────┐
+│    Unreal Engine Project │
+└────────────┬─────────────┘
+             │
+             ▼
+┌──────────────────────────┐
+│   Config/DefaultGame.ini │
+└────────────┬─────────────┘
+             │
+             ▼
+┌──────────────────────────┐
+│ Package Dedicated Server │
+└────────────┬─────────────┘
+             │
+             ▼
+┌──────────────────────────┐
+│    Create Server ZIP     │
+└────────────┬─────────────┘
+             │
+             ▼
+┌──────────────────────────┐
+│      Upload ZIP          │
+│       to UE5 DSM         │
+└────────────┬─────────────┘
+             │
+             ▼
+┌──────────────────────────┐
+│   POST /api/prepare_build│
+└────────────┬─────────────┘
+             │
+             ▼
+┌──────────────────────────┐
+│   POST /api/create_server│
+└────────────┬─────────────┘
+             │
+             ▼
+┌──────────────────────────┐
+│ Dedicated Server Running │
+└──────────────────────────┘
 
-To check available servers at any time:
+
+To check the available servers at any time:
 
 POST /api/server_list
 
-USE
+Running UE5 DSM
+Start
 
-start stop -----------------------
+To run UE5 DSM in the background and save the output to a log file:
 
 nohup ./UE5ServMan > ue5_serv_man.log 2>&1 &
 
+Stop
+
+To stop the running UE5 DSM process:
+
 pkill -f UE5ServMan
+
+View Logs
+tail -f ue5_serv_man.log
 
 Dependencies
 
 The project automatically downloads its external dependencies using CMake FetchContent.
 
+Dependency  Version
 cpp-httplib
-
-Version: v0.18.3
-
+    v0.18.3
 nlohmann/json
-
-Version: v3.11.3
+    v3.11.3
 
 No manual installation of these libraries is required.
 
 C++ Standard
 
-The project uses C++17:
+UE5 DSM uses C++17.
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+Security
+
+Please keep the following values private:
+
+AUTH_KEY
+AuthKey
+
+
+Do not store real authorization keys in:
+
+Public GitHub repositories
+config.h
+DefaultGame.ini
+Public documentation
+Git history
+
+Use environment variables, deployment configuration, or another secure secret-management mechanism whenever possible.
+
 License
 
-Copyright (c) 2026 Rahman Qadirzade
+Copyright © 2026 Rahman Qadirzade
 
 This project is licensed under the MIT License.
 
