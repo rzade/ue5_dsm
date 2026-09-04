@@ -319,12 +319,7 @@ To stop the running UE5 DSM process:
 pkill -f UE5ServMan
 ```
 
-### View Logs
-```
-tail -f ue5_serv_man.log
-```
-
-Dependencies
+### Dependencies
 
 The project automatically downloads its external dependencies using CMake FetchContent.
 
