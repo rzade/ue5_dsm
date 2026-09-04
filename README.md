@@ -57,15 +57,15 @@ build-linux/UE5ServMan
 5. Run
 ./UE5ServMan
 
-Build Output
+## Build Output
 
 The expected build structure is:
-
+```
 build-linux/
 ├── UE5ServMan
 ├── ServerBuild/
 └── build/
-
+```
 Directory / File    Description
 UE5ServMan  Main UE5 DSM executable
 ServerBuild/    Packaged Unreal Engine Dedicated Server builds
