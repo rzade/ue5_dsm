@@ -34,18 +34,21 @@ git clone https://github.com/rzade/ue5_dsm.git
 cd ue5_dsm
 
 2. Create the Linux Build Directory
+```
 mkdir build-linux
 cd build-linux
+```
 
 3. Configure the Project
 
 Configure CMake in Release mode:
-
+```
 cmake .. -DCMAKE_BUILD_TYPE=Release
-
+```
 4. Build
+```
 cmake --build . -j1
-
+```
 
 After a successful build, the executable will be available at:
 
