@@ -32,7 +32,10 @@ An installed Unreal Engine 5 version is also required for building and packaging
 Build
 1. Clone the Repository
 git clone https://github.com/rzade/ue5_dsm.git
+
+```
 cd ue5_dsm
+```
 
 2. Create the Linux Build Directory
 ```
@@ -250,7 +253,7 @@ MaxDynamicBandwidth=80000
 MinDynamicBandwidth=4000
 
 [/Script/DSMProject.DSMGameInstance]
-ServerAddress=YOUR_SERVER_IP:1204
+ServerAddress=YOUR_SERVER_IP:your_port
 AuthKey=YOUR_AUTHORIZATION_KEY
 ```
 
