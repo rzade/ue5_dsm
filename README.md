@@ -208,37 +208,6 @@ POST your_server_ip:your_port/api/prepare_build
 }
 ```
 
-The buildname must match the uploaded server build.
-
-API Workflow
-
-A typical server management workflow looks like this:
-```
-┌─────────────────────┐
-│  Upload Server ZIP  │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   prepare_build     │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│    create_server    │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│    Server Running   │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│    delete_server    │
-└─────────────────────┘
-```
-
 ## Unreal Engine Project Configuration
 
 Before using UE5 DSM with your Unreal Engine project, add the following configuration to:
