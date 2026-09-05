@@ -46,6 +46,7 @@ Set the required values:
 ```
 #define HTTP_HOST "YOUR_SERVER_IP"
 #define SERVER_IP "YOUR_SERVER_IP"
+#define SERVER_USER "rzade"
 #define AUTH_KEY "YOUR_AUTHORIZATION_KEY"
 ```
 
@@ -97,6 +98,10 @@ Directory / File    Description
 UE5ServMan  Main UE5 DSM executable
 ServerBuild/    Packaged Unreal Engine Dedicated Server builds
 build/  CMake and other build-related files
+
+```
+chmod -R ./ServerBuild/
+```
 
 ## API
 
