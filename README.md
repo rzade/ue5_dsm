@@ -37,6 +37,28 @@ git clone https://github.com/rzade/ue5_dsm.git
 cd ue5_dsm
 ```
 
+Before building UE5 DSM, configure your server address and authorization key in:
+```
+src/config.h
+```
+
+Set the required values:
+```
+#define HTTP_HOST "YOUR_SERVER_IP"
+#define SERVER_IP "YOUR_SERVER_IP"
+#define AUTH_KEY "YOUR_AUTHORIZATION_KEY"
+```
+
+Replace:
+
+YOUR_SERVER_IP — Your UE5 DSM server IP address.
+YOUR_AUTHORIZATION_KEY — Your API authorization key.
+
+[!WARNING]
+Never commit your real authorization key to a public GitHub repository.
+
+Keep your private configuration out of version control or use a separate local configuration file.
+
 2. Create the Linux Build Directory
 ```
 mkdir build-linux
@@ -75,29 +97,6 @@ Directory / File    Description
 UE5ServMan  Main UE5 DSM executable
 ServerBuild/    Packaged Unreal Engine Dedicated Server builds
 build/  CMake and other build-related files
-Configuration
-
-Before building UE5 DSM, configure your server address and authorization key in:
-```
-src/config.h
-```
-
-Set the required values:
-```
-#define HTTP_HOST "YOUR_SERVER_IP"
-#define SERVER_IP "YOUR_SERVER_IP"
-#define AUTH_KEY "YOUR_AUTHORIZATION_KEY"
-```
-
-Replace:
-
-YOUR_SERVER_IP — Your UE5 DSM server IP address.
-YOUR_AUTHORIZATION_KEY — Your API authorization key.
-
-[!WARNING]
-Never commit your real authorization key to a public GitHub repository.
-
-Keep your private configuration out of version control or use a separate local configuration file.
 
 ## API
 
@@ -257,6 +256,27 @@ ServerAddress=YOUR_SERVER_IP:your_port
 AuthKey=YOUR_AUTHORIZATION_KEY
 ```
 
+### Config/DefaultEngine.ini
+
+```
+[OnlineSubsystem]
+DefaultPlatformService=Null
+bHasVoiceEnabled=true
++NetDriverDefinitions=(DefName="GameNetDriver",DriverClassName="/Script/OnlineSubsystemUtils.IpNetDriver")
+
+[Voice]
+bEnabled=true
+
+[/Script/OnlineSubsystemUtils.IpNetDriver]
+NetServerMaxTickRate=60
+MaxClientRate=50000
+MaxInternetClientRate=50000
+
+[/Script/Engine.Player]
+ConfiguredInternetSpeed=500000
+ConfiguredLanSpeed=500000
+```
+
 After changing DefaultGame.ini, you must rebuild and package your Unreal Engine Dedicated Server before uploading the new server ZIP to UE5 DSM.
 
 Recommended Deployment Flow
@@ -271,13 +291,13 @@ Recommended Deployment Flow
 └────────────┬─────────────┘
              │
              ▼
-┌──────────────────────────┐
-│ Package Dedicated Server │
-└────────────┬─────────────┘
+┌────────────────────────────┐
+│   Config/DefaultEngine.ini │
+└────────────┬───────────────┘
              │
              ▼
 ┌──────────────────────────┐
-│    Create Server ZIP     │
+│ Package Dedicated Server │
 └────────────┬─────────────┘
              │
              ▼
@@ -367,11 +387,3 @@ Use environment variables, deployment configuration, or another secure secret-ma
 License
 
 Copyright © 2026 Rahman Qadirzade
-
-This project is licensed under the MIT License.
-
-See the LICENSE file for the complete license text.
-
-Author
-
-## Rahman Qadirzade
